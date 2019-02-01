@@ -102,4 +102,8 @@ REQUIREMENTS_MAP = {
         {'module_name': 'service_account_key_scanner',
          'class_name': 'ServiceAccountKeyScanner',
          'rules_filename': 'service_account_key_rules.yaml'},
+    'target_https_proxy':
+        {'module_name': 'target_https_proxy_scanner',
+         'class_name': 'TargetHttpsProxyScanner',
+         'rules_filename': 'target_https_proxy_rules.yaml'}
 }

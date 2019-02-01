@@ -50,5 +50,6 @@ VIOLATION_RESOURCES = {
     'RETENTION_VIOLATION': 'retention_violations',
     'SERVICE_ACCOUNT_KEY_VIOLATION': (
         'service_account_key_violations'),
+    'TARGET_HTTPS_PROXY_VIOLATION': 'target_https_proxy_violation'
     'EXTERNAL_PROJECT_ACCESS_VIOLATION': 'external_project_access_violations'
 }

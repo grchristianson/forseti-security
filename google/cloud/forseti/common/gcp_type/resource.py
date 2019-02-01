@@ -49,6 +49,7 @@ class ResourceType(object):
     INSTANCE_GROUP = resources.ComputeInstanceGroup.type()
     INSTANCE_GROUP_MANAGER = resources.ComputeInstanceGroupManager.type()
     INSTANCE_TEMPLATE = resources.ComputeInstanceTemplate.type()
+    TARGET_HTTPS_PROXY = resources.ComputeTargetHttpsProxy.type()
 
     # Data storage
     BUCKET = resources.StorageBucket.type()
@@ -75,6 +76,7 @@ class ResourceType(object):
         BUCKET,
         GROUP,
         FORWARDING_RULE,
+        TARGET_HTTPS_PROXY,
         LIEN,
         LOG_SINK,
     ])
