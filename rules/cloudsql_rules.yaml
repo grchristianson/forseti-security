@@ -18,15 +18,14 @@ rules:
     authorized_networks: '0.0.0.0/0'
     ssl_enabled: 'False'
     resource:
-      - type: organization
+      - type: project
         resource_ids:
-          - {ORGANIZATION_ID}
+          - tgt-pe-lab
   - name: Cloud SQL rule to search for publicly exposed instances (SSL enabled)
     instance_name: '*'
     authorized_networks: '0.0.0.0/0'
     ssl_enabled: 'True'
     resource:
-      - type: organization
+      - type: project
         resource_ids:
-          - {ORGANIZATION_ID}
-
+          - tgt-pe-lab

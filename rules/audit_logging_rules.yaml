@@ -12,20 +12,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# rules:
-#   # example rules
-#   - name: 'Require AUDIT_READ on all services, with exemptions.'
-#     resource:
-#       - type: project
-#         resource_ids:
-#           # NOTE: The wild card resource id is only valid for projects.
-#           - '*'
-#     service: 'allServices'
-#     log_types:
-#       - 'ADMIN_READ'
-#     allowed_exemptions:
-#       - 'user:user1@org.com'
-#       - 'user:user3@org.com'
+rules:
+  # example rules
+  - name: 'Require logging on all services.'
+    resource:
+      - type: project
+        resource_ids:
+          - 'tgt-pe-lab'
+    service: 'allServices'
+    log_types:
+      - 'ADMIN_READ'
+      - 'DATA_READ'
+      - 'DATA_WRITE'
+  # - name: 'Require all logging for compute.'
+  #   resource:
+  #     - type: project
+  #       resource_ids:
+  #         - 'tgt-pe-lab'
+  #   service: 'compute.googleapis.com'
+  #   log_types:
+  #     - 'ADMIN_READ'
+  #     - 'DATA_READ'
+  #     - 'DATA_WRITE'
+  # - name: 'Require all logging for pubsub.'
+  #   resource:
+  #     - type: project
+  #       resource_ids:
+  #         - 'tgt-pe-lab'
+  #   service: 'pubsub.googleapis.com'
+  #   log_types:
+  #     - 'ADMIN_READ'
+  #     - 'DATA_READ'
+  #     - 'DATA_WRITE'
+  # - name: 'Require all logging for cloudsql.'
+  #   resource:
+  #     - type: project
+  #       resource_ids:
+  #         - 'tgt-pe-lab'
+  #   service: 'sql-component.googleapis.com'
+  #   log_types:
+  #     - 'ADMIN_READ'
+  #     - 'DATA_READ'
+  #     - 'DATA_WRITE'
 #   - name: 'Require DATA_WRITE logging in folder 56'
 #     resource:
 #       - type: folder
@@ -59,4 +87,3 @@
 #       - 'ADMIN_READ'
 #       - 'DATA_READ'
 #       - 'DATA_WRITE'
-

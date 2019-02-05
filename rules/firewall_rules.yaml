@@ -39,17 +39,55 @@ rules:
           ports:
             - 'all'
 
+  - rule_id: 'prevent_apply_to_all_instances'
+    description: Detect policies that apply to all instances (null target tag)
+    mode: blacklist
+    match_policies:
+      - allowed: ['*']
+        targetTags:
+          - ''
+      - denied: ['*']
+        targetTags:
+          - ''
+    verify_policies:
+      - allowed: ['*']
+      - denied: ['*']
+
+  - rule_id: 'prevent_allow_all_IP_ranges'
+    description: Detect policies that apply to all instances (null target tag)
+    mode: blacklist
+    match_policies:
+      - allowed: ['*']
+        direction: ingress
+      # - allowed: ['*']
+      #   direction: egress
+      #   destinationRanges:
+      #     - '0.0.0.0/0'
+      # - denied: ['*']
+      #   direction: egress
+      #   destinationRanges:
+      #     - '0.0.0.0/0'
+    verify_policies:
+      - allowed: ['*']
+        sourceTags:
+          - ''
+        sourceRanges:
+          - '0.0.0.0/0'
+      # - denied: ['*']
+
 rule_groups:
   - group_id: 'default_rules'
     rule_ids:
-      - 'prevent_allow_all_ingress'
-      - 'disallow_all_ports'
+      #- 'prevent_allow_all_ingress'
+      #- 'disallow_all_ports'
+      #- 'prevent_apply_to_all_instances'
+      - 'prevent_allow_all_IP_ranges'
 
 org_policy:
   resources:
-    - type: organization
+    - type: project
       resource_ids:
-        - {ORGANIZATION_ID}
+        - tgt-pe-lab
       rules:
         group_ids:
           - 'default_rules'
