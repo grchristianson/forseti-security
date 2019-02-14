@@ -145,7 +145,7 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         """
         proxy_name = rule_def.get('proxy_name')
         ssl_policy = rule_def.get('ssl_policy')
-        if ((proxy_name is None) or (ssl_policy is None):
+        if ((proxy_name is None) or (ssl_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
                 'Faulty rule {}'.format(rule_def.get('name')))
         rule_def_resource = {'proxy_name': proxy_name,
@@ -196,8 +196,8 @@ class Rule(object):
             bool: true if the target https proxy matched at least 1 rule in the
                 rulebook
         """
-        proxy_match = (self.rules['proxy_name'] == '*') or (target_https_proxy.proxy_name == self.rules['proxy_name'])
+        proxy_match = (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name)
 
         if proxy_match:
             return target_https_proxy.ssl_policy == self.rules['ssl_policy']
-        return false
+        return False

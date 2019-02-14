@@ -95,7 +95,7 @@ class TargetHttpsProxyScanner(base_scanner.BaseScanner):
         """Runs the data collection.
 
         Returns:
-            list: forwarding rule list.
+            list: target https proxy list.
         """
         model_manager = self.service_config.model_manager
         scoped_session, data_access = model_manager.get(self.model_name)
