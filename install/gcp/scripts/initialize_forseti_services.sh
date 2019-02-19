@@ -32,10 +32,10 @@ fi
 # resolved in the future, we should create a forseti db user instead of using
 # root.
 # https://github.com/GoogleCloudPlatform/forseti-security/issues/921
-SQL_SERVER_LOCAL_ADDRESS="mysql://root@127.0.0.1:${SQL_PORT}"
+SQL_SERVER_LOCAL_ADDRESS="mysql://forseti-user@127.0.0.1:${SQL_PORT}"
 FORSETI_SERVICES="explain inventory model scanner notifier"
 
-FORSETI_COMMAND="$(which forseti_server) --endpoint '[::]:50051'"
+FORSETI_COMMAND="$(which forseti_server) --endpoint '127.0.0.1:50051'"
 FORSETI_COMMAND+=" --forseti_db ${SQL_SERVER_LOCAL_ADDRESS}/${FORSETI_DB_NAME}?charset=utf8"
 FORSETI_COMMAND+=" --config_file_path ${FORSETI_SERVER_CONF}"
 FORSETI_COMMAND+=" --services ${FORSETI_SERVICES}"
@@ -50,7 +50,7 @@ API_SERVICE="$(cat << EOF
 Description=Forseti API Server
 Wants=cloudsqlproxy.service
 [Service]
-User=ubuntu
+User=centos
 Restart=always
 RestartSec=3
 ExecStart=$FORSETI_COMMAND
