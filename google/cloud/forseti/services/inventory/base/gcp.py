@@ -1511,6 +1511,7 @@ class ApiClientImpl(ApiClient):
         raise ResourceNotSupported('Compute TargetHttpProxies are not '
                                    'supported by this API client')
 
+    @create_lazy('compute', _create_compute)
     def iter_compute_targethttpsproxies(self, project_number):
         """Iterate Target HTTPS proxies from GCP API.
 
@@ -1520,8 +1521,8 @@ class ApiClientImpl(ApiClient):
         Raises:
             ResourceNotSupported: Raised for all calls using this class.
         """
-        raise ResourceNotSupported('Compute TargetHttpsProxies are not '
-                                   'supported by this API client')
+        for targethttpsproxy in self.compute.get_target_https_proxies(project_number):
+            yield targethttpsproxy
 
     def iter_compute_targetinstances(self, project_number):
         """Iterate Target Instances from GCP API.

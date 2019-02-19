@@ -1047,7 +1047,7 @@ class ComputeTargetHttpProxy(resource_class_factory('compute_targethttpproxy',
     """The Resource implementation for Compute TargetHttpProxy."""
 
 
-class ComputeTargetHttpsProxy(resource_class_factory('compute_targethttpsproxy',
+class ComputeTargetHttpsProxy(resource_class_factory('targethttpsproxy',
                                                      'id')):
     """The Resource implementation for Compute TargetHttpsProxy."""
 

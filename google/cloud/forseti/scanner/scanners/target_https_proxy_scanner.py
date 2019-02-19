@@ -102,7 +102,7 @@ class TargetHttpsProxyScanner(base_scanner.BaseScanner):
         with scoped_session as session:
             target_https_proxies = []
             for target_https_proxy in data_access.scanner_iter(
-                    session, 'compute_targethttpsproxy'):
+                    session, 'targethttpsproxy'):
                 project_id = target_https_proxy.parent.name
                 target_https_proxies.append(
                     TargetHttpsProxy.from_json(
