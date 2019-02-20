@@ -1518,8 +1518,8 @@ class ApiClientImpl(ApiClient):
         Args:
             project_number (str): number of the project to query.
 
-        Raises:
-            ResourceNotSupported: Raised for all calls using this class.
+        Yields:
+            dict: Generator of targethhtpsproxy resources.
         """
         for targethttpsproxy in self.compute.get_target_https_proxies(project_number):
             yield targethttpsproxy

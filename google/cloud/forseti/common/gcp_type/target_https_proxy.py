@@ -45,7 +45,7 @@ class TargetHttpsProxy(object):
             quic_override (str): quic override
             ssl_policy (str): ssl_policy
             kind (str): kind
-            raw_json (str): The raw json string for the forwarding rule.
+            raw_json (str): The raw json string for the target https proxy.
         """
         self.project_id = project_id
         self.resource_id = resource_id
