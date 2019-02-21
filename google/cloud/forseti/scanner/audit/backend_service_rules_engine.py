@@ -80,34 +80,35 @@ class BackendServiceRulesEngine(bre.BaseRulesEngine):
 
         for rule in resource_rules:
             if rule.find_match(backend_service):
-                return None
+                return self.RuleViolation(
+                    violation_type='BACKEND_SERVICE_VIOLATION',
+                    resource_id=backend_service.resource_id,
+                    full_name=backend_service.full_name,
+                    rule_index=len(resource_rules),
+                    resource_name=backend_service.name,
+                    resource_type=ResourceType.BACKEND_SERVICE,
+                    resource_data=str(backend_service),
+                    affinity_cookie_ttl_sec=backend_service.affinity_cookie_ttl_sec,
+                    backends=backend_service.backends,
+                    cdn_policy=backend_service.cdn_policy,
+                    connection_draining=backend_service.connection_draining,
+                    creation_timestamp=backend_service.creation_timestamp,
+                    description=backend_service.description,
+                    enable_cdn=backend_service.enable_cdn,
+                    health_checks=backend_service.health_checks,
+                    iap=backend_service.iap,
+                    load_balancing_scheme=backend_service.load_balancing_scheme,
+                    port=backend_service.port,
+                    port_name=backend_service.port_name,
+                    project_id=backend_service.project_id,
+                    protocol=backend_service.protocol,
+                    region=backend_service.region,
+                    session_affinity=backend_service.session_affinity,
+                    security_policy=backend_service.security_policy,
+                    timeout_sec=backend_service.timeout_sec)
+        return None
 
-        return self.RuleViolation(
-            violation_type='BACKEND_SERVICE_VIOLATION',
-            resource_id=backend_service.resource_id,
-            full_name=backend_service.full_name,
-            rule_index=len(resource_rules),
-            resource_name=backend_service.name,
-            resource_type=ResourceType.BACKEND_SERVICE,
-            resource_data=str(backend_service),
-            affinity_cookie_ttl_sec=backend_service.affinity_cookie_ttl_sec,
-            backends=backend_service.backends,
-            cdn_policy=backend_service.cdn_policy,
-            connection_draining=backend_service.connection_draining,
-            creation_timestamp=backend_service.creation_timestamp,
-            description=backend_service.description,
-            enable_cdn=backend_service.enable_cdn,
-            health_checks=backend_service.health_checks,
-            iap=backend_service.iap,
-            load_balancing_scheme=backend_service.load_balancing_scheme,
-            port=backend_service.port,
-            port_name=backend_service.port_name,
-            project_id=backend_service.project_id,
-            protocol=backend_service.protocol,
-            region=backend_service.region,
-            session_affinity=backend_service.session_affinity,
-            security_policy=backend_service.security_policy,
-            timeout_sec=backend_service.timeout_sec)
+
 
     def add_rules(self, rules):
         """Add rules to the rule book.
@@ -200,16 +201,16 @@ class Rule(object):
         self.rules = rules
 
     def find_match(self, backend_service):
-        """Find if the passed in backend service matches any in the rule book
+        """Find if the passed in backend service violates any in the rule book
 
         Args:
             backend_service (BackendService): backend service resource
 
         Returns:
-            bool: true if the backend service matched at least 1 rule in the
+            bool: true if the backend service violated at least 1 rule in the
                 rulebook
         """
 
         if self.rules['backend_service_name'] == backend_service.name:
-            return backend_service.security_policy == self.rules['security_policy']
+            return backend_service.security_policy != self.rules['security_policy']
         return False
