@@ -78,23 +78,22 @@ class TargetHttpsProxyRulesEngine(bre.BaseRulesEngine):
         # else your fwd rule violates the rulebook and will return a violation
         for rule in resource_rules:
             if rule.find_match(target_https_proxy):
-                return self.RuleViolation(
-                    violation_type='TARGET_HTTPS_PROXY_VIOLATION',
-                    resource_id=target_https_proxy.resource_id,
-                    full_name=target_https_proxy.full_name,
-                    rule_index=len(resource_rules),
-                    resource_name=target_https_proxy.name,
-                    resource_type=ResourceType.TARGET_HTTPS_PROXY,
-                    resource_data=str(target_https_proxy),
-                    self_link=target_https_proxy.self_link,
-                    url_map=target_https_proxy.url_map,
-                    ssl_certificates=target_https_proxy.ssl_certificates,
-                    quic_override=target_https_proxy.quic_override,
-                    ssl_policy=target_https_proxy.ssl_policy,
-                    kind=target_https_proxy.kind)
-        return None
+                return None
 
-
+        return self.RuleViolation(
+            violation_type='TARGET_HTTPS_PROXY_VIOLATION',
+            resource_id=target_https_proxy.resource_id,
+            full_name=target_https_proxy.full_name,
+            rule_index=len(resource_rules),
+            resource_name=target_https_proxy.name,
+            resource_type=ResourceType.TARGET_HTTPS_PROXY,
+            resource_data=str(target_https_proxy),
+            self_link=target_https_proxy.self_link,
+            url_map=target_https_proxy.url_map,
+            ssl_certificates=target_https_proxy.ssl_certificates,
+            quic_override=target_https_proxy.quic_override,
+            ssl_policy=target_https_proxy.ssl_policy,
+            kind=target_https_proxy.kind)
 
     def add_rules(self, rules):
         """Add rules to the rule book.
@@ -188,15 +187,17 @@ class Rule(object):
         self.rules = rules
 
     def find_match(self, target_https_proxy):
-        """Find if the passed in target https proxy violates any in the rule book
+        """Find if the passed in target https proxy matches any in the rule book
 
         Args:
             target_https_proxy (TargetHttpsProxy): target https proxy resource
 
         Returns:
-            bool: true if the target https proxy violated at least 1 rule in the
+            bool: true if the target https proxy matched at least 1 rule in the
                 rulebook
         """
-        if (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name):
-            return target_https_proxy.ssl_policy != self.rules['ssl_policy']
+        proxy_match = (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name)
+
+        if proxy_match:
+            return target_https_proxy.ssl_policy == self.rules['ssl_policy']
         return False
