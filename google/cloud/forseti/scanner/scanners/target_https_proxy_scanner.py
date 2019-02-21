@@ -62,15 +62,13 @@ class TargetHttpsProxyScanner(base_scanner.BaseScanner):
             dict: Iterator of RuleViolations as a dict per member.
         """
         for violation in violations:
-            violation_data = {'full_name': violation.full_name,
-                              'name': violation.resource_name,
-                              'violation_type': violation.violation_type,
+            violation_data = {'name': violation.resource_name,
                               'self_link': violation.self_link,
                               'url_map': violation.url_map,
                               'ssl_certificates': violation.ssl_certificates,
                               'quic_override': violation.quic_override,
-                              'ssl_policy': violation.ssl_policy,
-                              'kind': violation.kind}
+                              'ssl_policy': violation.ssl_policy
+                              }
             yield {
                 'resource_id': violation.resource_id,
                 'resource_name': violation.resource_name,
