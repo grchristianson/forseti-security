@@ -210,7 +210,7 @@ class ComputeRepositoryClient(_base_repository.BaseRepositoryClient):
         self._target_https_proxies = None
 
         super(ComputeRepositoryClient, self).__init__(
-            API_NAME, versions=['beta', 'v1'],
+            API_NAME, versions=['alpha', 'beta', 'v1'],
             quota_max_calls=quota_max_calls,
             quota_period=quota_period,
             use_rate_limiter=use_rate_limiter,
@@ -345,7 +345,7 @@ class ComputeRepositoryClient(_base_repository.BaseRepositoryClient):
         """Returns a _ComputeTargetHttpsProxiesRepository instance."""
         if not self._target_https_proxies:
             self._target_https_proxies = self._init_repository(
-                _ComputeTargetHttpsProxiesRepository)
+                _ComputeTargetHttpsProxiesRepository, version='alpha')
         return self._target_https_proxies
     # pylint: enable=missing-return-doc, missing-return-type-doc
 
@@ -682,6 +682,8 @@ class _ComputeSubnetworksRepository(repository_mixins.AggregatedListQueryMixin,
         kwargs['region'] = region
         return repository_mixins.ListQueryMixin.list(self, resource, **kwargs)
     # pylint: enable=arguments-differ
+
+
 class _ComputeTargetHttpsProxiesRepository(
         repository_mixins.ListQueryMixin,
         _base_repository.GCPRepository):

@@ -160,7 +160,6 @@ class InventoryImporter(object):
             'compute_router',
             'compute_sslcertificate',
             'compute_targethttpproxy',
-            'compute_targethttpsproxy',
             'compute_targetinstance',
             'compute_targetpool',
             'compute_targetsslproxy',
@@ -196,6 +195,7 @@ class InventoryImporter(object):
             'spanner_instance',
             'spanner_database',
             'subnetwork',
+            'targethttpsproxy',
             'bigquery_table',
         ]
 
@@ -548,7 +548,7 @@ class InventoryImporter(object):
             'compute_router': self._convert_computeengine_resource,
             'compute_sslcertificate': self._convert_computeengine_resource,
             'compute_targethttpproxy': self._convert_computeengine_resource,
-            'compute_targethttpsproxy': self._convert_computeengine_resource,
+
             'compute_targetinstance': self._convert_computeengine_resource,
             'compute_targetpool': self._convert_computeengine_resource,
             'compute_targetsslproxy': self._convert_computeengine_resource,
@@ -587,6 +587,7 @@ class InventoryImporter(object):
             'spanner_database': self._convert_spanner_db_resource,
             'spanner_instance': self._convert_spanner_resource,
             'subnetwork': self._convert_computeengine_resource,
+            'targethttpsproxy': self._convert_computeengine_resource,
             None: None,
         }
 
