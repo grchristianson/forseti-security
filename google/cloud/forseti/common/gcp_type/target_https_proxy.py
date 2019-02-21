@@ -80,12 +80,12 @@ class TargetHttpsProxy(object):
             creation_timestamp=target_https_proxy.get('creationTimestamp', ''),
             name=target_https_proxy.get('name', ''),
             description=target_https_proxy.get('description', ''),
-            self_link=target_https_proxy.get('selfLink,' ''),
-            url_map=target_https_proxy.get('urlMap',''),
-            ssl_certificates=target_https_proxy.get('sslCertificates',''),
-            quic_override=target_https_proxy.get('quicOverride',''),
-            ssl_policy=target_https_proxy.get('sslPolicy',''),
-            kind=target_https_proxy.get('kind',''),
+            self_link=target_https_proxy.get('selfLink', ''),
+            url_map=target_https_proxy.get('urlMap', ''),
+            ssl_certificates=target_https_proxy.get('sslCertificates', ''),
+            quic_override=target_https_proxy.get('quicOverride', ''),
+            ssl_policy=target_https_proxy.get('sslPolicy', ''),
+            kind=target_https_proxy.get('kind', ''),
             raw_json=json.dumps(target_https_proxy, sort_keys=True)
         )
 
