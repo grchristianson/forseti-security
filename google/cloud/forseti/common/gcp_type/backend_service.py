@@ -56,6 +56,7 @@ class BackendService(resource.Resource):
         self.protocol = kwargs.get('protocol')
         self.region = kwargs.get('region')
         self.resource_id = kwargs.get('id')
+        self.security_policy = kwargs.get('security_policy')
         self.session_affinity = kwargs.get('session_affinity')
         self.timeout_sec = kwargs.get('timeout_sec')
         self._json = kwargs.get('raw_backend_service')
@@ -94,6 +95,7 @@ class BackendService(resource.Resource):
                   'port_name': backend_service.get('portName'),
                   'protocol': backend_service.get('protocol'),
                   'region': backend_service.get('region'),
+                  'security_policy': backend_service.get('securityPolicy'),
                   'session_affinity': backend_service.get('sessionAffinity'),
                   'timeout_sec': backend_service.get('timeoutSec'),
                   'raw_backend_service': json.dumps(
@@ -139,6 +141,7 @@ class BackendService(resource.Resource):
             'portName': self.port_name,
             'protocol': self.protocol,
             'region': self.region,
+            'securityPolicy': self.security_policy,
             'sessionAffinity': self.session_affinity,
             'timeoutSec': self.timeout_sec}
 

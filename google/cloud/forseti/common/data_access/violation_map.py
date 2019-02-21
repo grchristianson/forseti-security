@@ -26,6 +26,7 @@ VIOLATION_MAP = {
 
 VIOLATION_RESOURCES = {
     'AUDIT_LOGGING_VIOLATION': 'audit_logging_violations',
+    'BACKEND_SERVICE_VIOLATION': 'backend_service_violations',
     'BIGQUERY_VIOLATION': 'bigquery_acl_violations',
     'BLACKLIST_VIOLATION': 'blacklist_violations',
     'BUCKET_VIOLATION': 'buckets_acl_violations',
