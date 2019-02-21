@@ -101,8 +101,9 @@ class BackendServiceScanner(base_scanner.BaseScanner):
                 project_id = backend_service.parent.name
                 backend_services.append(
                     BackendService.from_json(
-                        project_id, backend_service.full_name,
-                        backend_service.data))
+                        backend_service.full_name,
+                        backend_service.data,
+                        project_id))
 
         return backend_services
 
