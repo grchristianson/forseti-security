@@ -22,6 +22,10 @@ REQUIREMENTS_MAP = {
         {'module_name': 'audit_logging_scanner',
          'class_name': 'AuditLoggingScanner',
          'rules_filename': 'audit_logging_rules.yaml'},
+    'backend_service':
+        {'module_name': 'backend_service_scanner',
+         'class_name': 'BackendServiceScanner',
+         'rules_filename': 'backend_service_rules.yaml'},
     'bigquery':
         {'module_name': 'bigquery_scanner',
          'class_name': 'BigqueryScanner',
