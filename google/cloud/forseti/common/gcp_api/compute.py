@@ -683,7 +683,6 @@ class _ComputeSubnetworksRepository(repository_mixins.AggregatedListQueryMixin,
         return repository_mixins.ListQueryMixin.list(self, resource, **kwargs)
     # pylint: enable=arguments-differ
 class _ComputeTargetHttpsProxiesRepository(
-        repository_mixins.AggregatedListQueryMixin,
         repository_mixins.ListQueryMixin,
         _base_repository.GCPRepository):
     """Implementation of Compute Target Https Proxies repository."""
@@ -696,22 +695,6 @@ class _ComputeTargetHttpsProxiesRepository(
         """
         super(_ComputeTargetHttpsProxiesRepository, self).__init__(
             component='targetHttpsProxies', **kwargs)
-
-    # Extend the base list implementation to support the required region field.
-    # pylint: disable=arguments-differ
-    def list(self, resource, region, **kwargs):
-        """List instances by zone.
-
-        Args:
-            resource (str): The project to query resources for.
-            region (str): The region of the target https proxies to query.
-            **kwargs (dict): Additional args to pass through to the base method.
-
-        Returns:
-            iterator: An iterator over each page of results from the API.
-        """
-        kwargs['region'] = region
-        return repository_mixins.ListQueryMixin.list(self, resource, **kwargs)
 
 # pylint: disable=too-many-public-methods
 class ComputeClient(object):
@@ -1366,7 +1349,7 @@ class ComputeClient(object):
                      project_id, region, flattened_results)
         return flattened_results
 
-    def get_target_https_proxies(self, project_id, region=None):
+    def get_target_https_proxies(self, project_id):
         """Get the target https proxies for a project.
 
         If no region name is specified, use aggregatedList() to query for
@@ -1380,17 +1363,13 @@ class ComputeClient(object):
             list: A list of target https proxies for this project.
         """
         repository = self.repository.target_https_proxies
-        if region:
-            paged_results = repository.list(project_id, region)
-            results = _flatten_list_results(project_id, paged_results, 'items')
-        else:
-            paged_results = repository.aggregated_list(project_id)
-            results = _flatten_aggregated_list_results(project_id,
-                                                       paged_results,
-                                                       'targetHttpsProxies')
+
+        paged_results = repository.list(project_id)
+        results = _flatten_list_results(project_id, paged_results, 'items')
+
         LOGGER.debug('Getting the target https proxies for a project, '
-                     'project_id = %s, region = %s, results = %s',
-                     project_id, region, results)
+                     'project_id = %s, results = %s',
+                     project_id, results)
         return results
 
     def is_api_enabled(self, project_id):
