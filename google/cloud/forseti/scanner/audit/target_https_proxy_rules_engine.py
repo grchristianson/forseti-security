@@ -74,26 +74,24 @@ class TargetHttpsProxyRulesEngine(bre.BaseRulesEngine):
         if not resource_rules:
             return None
 
-        # If your fwd rule matches at least 1 rule in rulebook return None
-        # else your fwd rule violates the rulebook and will return a violation
+        #if target https proxy violates at least 1 rule in rulebook, will return violation
         for rule in resource_rules:
-            if rule.find_match(target_https_proxy):
-                return None
-
-        return self.RuleViolation(
-            violation_type='TARGET_HTTPS_PROXY_VIOLATION',
-            resource_id=target_https_proxy.resource_id,
-            full_name=target_https_proxy.full_name,
-            rule_index=len(resource_rules),
-            resource_name=target_https_proxy.name,
-            resource_type=ResourceType.TARGET_HTTPS_PROXY,
-            resource_data=str(target_https_proxy),
-            self_link=target_https_proxy.self_link,
-            url_map=target_https_proxy.url_map,
-            ssl_certificates=target_https_proxy.ssl_certificates,
-            quic_override=target_https_proxy.quic_override,
-            ssl_policy=target_https_proxy.ssl_policy,
-            kind=target_https_proxy.kind)
+            if rule.find_violation(target_https_proxy):
+                return self.RuleViolation(
+                    violation_type='TARGET_HTTPS_PROXY_VIOLATION',
+                    resource_id=target_https_proxy.resource_id,
+                    full_name=target_https_proxy.full_name,
+                    rule_index=len(resource_rules),
+                    resource_name=target_https_proxy.name,
+                    resource_type=ResourceType.TARGET_HTTPS_PROXY,
+                    resource_data=str(target_https_proxy),
+                    self_link=target_https_proxy.self_link,
+                    url_map=target_https_proxy.url_map,
+                    ssl_certificates=target_https_proxy.ssl_certificates,
+                    quic_override=target_https_proxy.quic_override,
+                    ssl_policy=target_https_proxy.ssl_policy,
+                    kind=target_https_proxy.kind)
+        return None
 
     def add_rules(self, rules):
         """Add rules to the rule book.
@@ -145,11 +143,13 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         """
         proxy_name = rule_def.get('proxy_name')
         ssl_policy = rule_def.get('ssl_policy')
+        exemptions = rule_def.get('exempt')
         if ((proxy_name is None) or (ssl_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
                 'Faulty rule {}'.format(rule_def.get('name')))
         rule_def_resource = {'proxy_name': proxy_name,
                              'ssl_policy': ssl_policy,
+                             'exempt': exempt,
                              'full_name': ''}
 
         rule = Rule(rule_name=rule_def.get('name'),
@@ -186,18 +186,16 @@ class Rule(object):
         self.rule_index = rule_index
         self.rules = rules
 
-    def find_match(self, target_https_proxy):
-        """Find if the passed in target https proxy matches any in the rule book
+    def find_violation(self, target_https_proxy):
+        """Find if the passed in target https proxy violates a rule 
 
         Args:
             target_https_proxy (TargetHttpsProxy): target https proxy resource
 
         Returns:
-            bool: true if the target https proxy matched at least 1 rule in the
-                rulebook
+            bool: true if the target https proxy violates the rule.
         """
-        proxy_match = (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name)
-
-        if proxy_match:
-            return target_https_proxy.ssl_policy == self.rules['ssl_policy']
+        if (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name):
+            if target_https_proxy.ssl_policy != self.rules['ssl_policy']:
+                return target_https_proxy.name not in self.rules['exempt']
         return False
