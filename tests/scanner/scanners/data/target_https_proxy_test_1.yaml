@@ -14,7 +14,10 @@
 
 rules:
   - name: Rule Name Example
+    proxy_name: 'proxy-2'
+    ssl_policy: 'policy-2'
+  - name: Rule Name Example
     proxy_name: '*'
     ssl_policy: 'policy-1'
     exempt:
-      - proxy_name: 'proxy-2'
+      - 'proxy-1'

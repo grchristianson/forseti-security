@@ -27,7 +27,7 @@ class TargetHttpsProxyRulesEngine(bre.BaseRulesEngine):
     """Rules engine for target https proxy"""
 
     RuleViolation = namedtuple('RuleViolation',
-                               ['violation_type', 'rule_index', 'resource_type',
+                               ['violation_type', 'rule_index', 'rule_name', 'resource_type',
                                 'resource_data', 'resource_id', 'full_name',
                                 'resource_name', 'self_link', 'url_map',
                                 'ssl_certificates', 'quic_override', 'ssl_policy', 'kind'])
@@ -82,6 +82,7 @@ class TargetHttpsProxyRulesEngine(bre.BaseRulesEngine):
                     resource_id=target_https_proxy.resource_id,
                     full_name=target_https_proxy.full_name,
                     rule_index=len(resource_rules),
+                    rule_name=rule.rule_name,
                     resource_name=target_https_proxy.name,
                     resource_type=ResourceType.TARGET_HTTPS_PROXY,
                     resource_data=str(target_https_proxy),
@@ -143,7 +144,7 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         """
         proxy_name = rule_def.get('proxy_name')
         ssl_policy = rule_def.get('ssl_policy')
-        exemptions = rule_def.get('exempt')
+        exempt = rule_def.get('exempt')
         if ((proxy_name is None) or (ssl_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
                 'Faulty rule {}'.format(rule_def.get('name')))
@@ -155,6 +156,8 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         rule = Rule(rule_name=rule_def.get('name'),
                     rule_index=rule_index,
                     rules=rule_def_resource)
+
+        print(rule.rules)
 
         resource_rules = self.resource_rules_map.get(rule_index)
         if not resource_rules:
@@ -187,7 +190,7 @@ class Rule(object):
         self.rules = rules
 
     def find_violation(self, target_https_proxy):
-        """Find if the passed in target https proxy violates a rule 
+        """Find if the passed in target https proxy violates a rule
 
         Args:
             target_https_proxy (TargetHttpsProxy): target https proxy resource
@@ -197,5 +200,5 @@ class Rule(object):
         """
         if (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name):
             if target_https_proxy.ssl_policy != self.rules['ssl_policy']:
-                return target_https_proxy.name not in self.rules['exempt']
+                return (self.rules['exempt'] is None) or (target_https_proxy.name not in self.rules['exempt'])
         return False

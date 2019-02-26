@@ -63,6 +63,7 @@ class TargetHttpsProxyScanner(base_scanner.BaseScanner):
         """
         for violation in violations:
             violation_data = {'name': violation.resource_name,
+                              'rule_name': violation.rule_name,
                               'self_link': violation.self_link,
                               'url_map': violation.url_map,
                               'ssl_certificates': violation.ssl_certificates,
@@ -75,7 +76,7 @@ class TargetHttpsProxyScanner(base_scanner.BaseScanner):
                 'full_name': violation.full_name,
                 'resource_type': violation.resource_type,
                 'rule_index': violation.rule_index,
-                'rule_name': violation.violation_type,
+                'rule_name': violation.rule_name,
                 'violation_type': violation.violation_type,
                 'violation_data': violation_data,
                 'resource_data': violation.resource_data
