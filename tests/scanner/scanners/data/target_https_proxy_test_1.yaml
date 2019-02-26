@@ -13,9 +13,8 @@
 # limitations under the License.
 
 rules:
-  - name: rare-platypus-RIP-0
+  - name: Rule Name Example
     proxy_name: '*'
-    ssl_policy: 'rare-platform-ssl-policy'
-  - name: rare-platypus-RIP-1
-    proxy_name: 'proxy_0_name'
-    ssl_policy: 'policy_0'
+    ssl_policy: 'policy-1'
+    exempt:
+      - proxy_name: 'proxy-2'

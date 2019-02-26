@@ -34,20 +34,20 @@ class TargetHttpsProxyScannerTest(ForsetiTestCase):
         scanner = target_https_proxy_scanner.TargetHttpsProxyScanner(
             {}, {}, mock.MagicMock(), '', '', rules_local_path)
 
-        project_id = "abc-123"
+        project_id = "project-1"
 
         gcp_target_https_proxy_resource_data = [
             {
-                "id": "test_proxy_0",
-                "sslPolicy": "rare-platform-ssl-policy",
-                "name": "test_proxy_0_name",
-                "description": "description_0",
+                "id": "proxy-1",
+                "sslPolicy": "ssl-1",
+                "name": "proxy-1",
+                "description": "description-1",
             },
             {
-                "id": "test_proxy_1",
-                "sslPolicy": "rare-platform-ssl-policy",
-                "name": "test_proxy_1_name",
-                "description": "description_1",
+                "id": "proxy-2",
+                "sslPolicy": "ssl-2",
+                "name": "proxy-2",
+                "description": "description-2",
             },
         ]
         gcp_target_https_proxy_resource_objs = []
@@ -71,16 +71,16 @@ class TargetHttpsProxyScannerTest(ForsetiTestCase):
 
         gcp_target_https_proxy_resource_data = [
             {
-                "id": "test_proxy_0",
-                "sslPolicy": "does_not_match",
-                "name": "test_proxy_0_name",
-                "description": "description_0",
+                "id": "test_proxy_1",
+                "sslPolicy": "ssl-1",
+                "name": "proxy-v1",
+                "description": "description_1",
             },
             {
-                "id": "test_proxy_1",
-                "sslPolicy": "does_not_match",
-                "name": "test_proxy_1_name",
-                "description": "description_1",
+                "id": "test_proxy_2",
+                "sslPolicy": "ssl-2",
+                "name": "proxy-v2",
+                "description": "description_2",
             },
         ]
         gcp_target_https_proxy_resource_objs = []
