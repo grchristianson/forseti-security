@@ -146,20 +146,19 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         """
         proxy_name = escape_and_globify(rule_def.get('proxy_name'))
         ssl_policy = escape_and_globify(rule_def.get('ssl_policy'))
-        exempt = rule_def.get('exempt')
+        exemptions = None
+        if rule_def.get('exemptions') is not None:
+            exemptions = [escape_and_globify(e) for e in rule_def.get('exemptions')]
         if ((proxy_name is None) or (ssl_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
                 'Faulty rule {}'.format(rule_def.get('name')))
         rule_def_resource = {'proxy_name': proxy_name,
                              'ssl_policy': ssl_policy,
-                             'exempt': exempt,
-                             'full_name': ''}
+                             'exemptions': exemptions}
 
         rule = Rule(rule_name=rule_def.get('name'),
                     rule_index=rule_index,
                     rules=rule_def_resource)
-
-        print(rule.rules)
 
         resource_rules = self.resource_rules_map.get(rule_index)
         if not resource_rules:
@@ -206,18 +205,12 @@ class Rule(object):
             is_policy_match = re.match(self.rules['ssl_policy'], target_https_proxy.ssl_policy)
             if is_policy_match is None and not is_policy_match:
 
-                if self.rules['exempt'] is None:
+                if self.rules['exemptions'] is None:
                     return True
 
-                # TODO: for loop this
-
-                proxy_name_regex = re.compile(target_https_proxy.name)
                 is_exemption = any(
-                    exemption for exemption in self.rules['exempt']
-                    if proxy_name_regex.match(escape_and_globify(exemption)))
-
-                print('EXEMPTIONS:')
-                print(is_exemption)
+                    exemption for exemption in self.rules['exemptions']
+                    if re.match(exemption, target_https_proxy.name))
 
                 if not is_exemption:
                     return True
