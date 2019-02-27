@@ -14,9 +14,11 @@
 
 """Rules engine for target https proxy"""
 from collections import namedtuple
+import re
 
 from google.cloud.forseti.common.gcp_type.resource import ResourceType
 from google.cloud.forseti.common.util import logger
+from google.cloud.forseti.common.util.regular_exp import escape_and_globify
 from google.cloud.forseti.scanner.audit import base_rules_engine as bre
 from google.cloud.forseti.scanner.audit import errors as audit_errors
 
@@ -142,8 +144,8 @@ class TargetHttpsProxyRulesBook(bre.BaseRuleBook):
         Raises:
             InvalidRulesSchemaError: if rule has format error
         """
-        proxy_name = rule_def.get('proxy_name')
-        ssl_policy = rule_def.get('ssl_policy')
+        proxy_name = escape_and_globify(rule_def.get('proxy_name'))
+        ssl_policy = escape_and_globify(rule_def.get('ssl_policy'))
         exempt = rule_def.get('exempt')
         if ((proxy_name is None) or (ssl_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
@@ -198,7 +200,25 @@ class Rule(object):
         Returns:
             bool: true if the target https proxy violates the rule.
         """
-        if (self.rules['proxy_name'] == '*') or (self.rules['proxy_name'] == target_https_proxy.name):
-            if target_https_proxy.ssl_policy != self.rules['ssl_policy']:
-                return (self.rules['exempt'] is None) or (target_https_proxy.name not in self.rules['exempt'])
+        is_name_match = re.match(self.rules['proxy_name'], target_https_proxy.name)
+        if is_name_match is not None and is_name_match:
+
+            is_policy_match = re.match(self.rules['ssl_policy'], target_https_proxy.ssl_policy)
+            if is_policy_match is None and not is_policy_match:
+
+                if self.rules['exempt'] is None:
+                    return True
+
+                # TODO: for loop this
+
+                proxy_name_regex = re.compile(target_https_proxy.name)
+                is_exemption = any(
+                    exemption for exemption in self.rules['exempt']
+                    if proxy_name_regex.match(escape_and_globify(exemption)))
+
+                print('EXEMPTIONS:')
+                print(is_exemption)
+
+                if not is_exemption:
+                    return True
         return False

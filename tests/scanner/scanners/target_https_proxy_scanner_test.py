@@ -39,13 +39,12 @@ class TargetHttpsProxyScannerTest(ForsetiTestCase):
         gcp_target_https_proxy_resource_data = [
             {
                 "id": "proxy-1",
-                "sslPolicy": "policy-1",
+                "sslPolicy": "policy",
                 "name": "proxy-1",
                 "description": "description-1",
             },
             {
                 "id": "proxy-2",
-                "sslPolicy": "policy-2",
                 "name": "proxy-2",
                 "description": "description-2",
             },
