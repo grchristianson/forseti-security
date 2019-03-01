@@ -13,9 +13,11 @@
 # limitations under the License.
 
 rules:
-  - name: test0
-    backend_service_name: 'test_backend_service_0_name'
-    security_policy: 'policy0'
-  - name: test1
-    backend_service_name: 'test_backend_service_1_name'
-    security_policy: 'policy0'
+  - name: 'test1'
+    backend_service_name: '*'
+    security_policy: 'policy-1'
+    exemptions:
+      - '*2'
+  - name: 'test2'
+    backend_service_name: '*2'
+    security_policy: 'policy-2'
