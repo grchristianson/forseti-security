@@ -13,10 +13,12 @@
 # limitations under the License.
 
 """Rules engine for target https proxy"""
+import re
 from collections import namedtuple
 
 from google.cloud.forseti.common.gcp_type.resource import ResourceType
 from google.cloud.forseti.common.util import logger
+from google.cloud.forseti.common.util.regular_exp import escape_and_globify
 from google.cloud.forseti.scanner.audit import base_rules_engine as bre
 from google.cloud.forseti.scanner.audit import errors as audit_errors
 
@@ -79,7 +81,7 @@ class BackendServiceRulesEngine(bre.BaseRulesEngine):
             return None
 
         for rule in resource_rules:
-            if rule.find_match(backend_service):
+            if rule.find_violation(backend_service):
                 return self.RuleViolation(
                     violation_type='BACKEND_SERVICE_VIOLATION',
                     resource_id=backend_service.resource_id,
@@ -158,13 +160,17 @@ class BackendServiceRulesBook(bre.BaseRuleBook):
         Raises:
             InvalidRulesSchemaError: if rule has format error
         """
-        backend_service_name = rule_def.get('backend_service_name')
-        security_policy = rule_def.get('security_policy')
+        backend_service_name = escape_and_globify(rule_def.get('backend_service_name'))
+        security_policy = escape_and_globify(rule_def.get('security_policy'))
+        exemptions = None
+        if rule_def.get('exemptions') is not None:
+            exemptions = [escape_and_globify(e) for e in rule_def.get('exemptions')]
         if ((backend_service_name is None) or (security_policy is None)):
             raise audit_errors.InvalidRulesSchemaError(
                 'Faulty rule {}'.format(rule_def.get('name')))
         rule_def_resource = {'backend_service_name': backend_service_name,
-                             'security_policy': security_policy}
+                             'security_policy': security_policy,
+                             'exemptions': exemptions}
 
         rule = Rule(rule_name=rule_def.get('name'),
                     rule_index=rule_index,
@@ -200,17 +206,29 @@ class Rule(object):
         self.rule_index = rule_index
         self.rules = rules
 
-    def find_match(self, backend_service):
-        """Find if the passed in backend service violates any in the rule book
+
+    def find_violation(self, backend_service):
+        """Find if the passed in target https proxy violates a rule
 
         Args:
-            backend_service (BackendService): backend service resource
+            target_https_proxy (TargetHttpsProxy): target https proxy resource
 
         Returns:
-            bool: true if the backend service violated at least 1 rule in the
-                rulebook
+            bool: true if the target https proxy violates the rule.
         """
+        is_name_match = re.match(self.rules['backend_service_name'], backend_service.name)
+        if is_name_match is not None and is_name_match:
 
-        if self.rules['backend_service_name'] == backend_service.name:
-            return backend_service.security_policy != self.rules['security_policy']
+            is_policy_match = re.match(self.rules['security_policy'], backend_service.security_policy)
+            if is_policy_match is None and not is_policy_match:
+
+                if self.rules['exemptions'] is None:
+                    return True
+
+                is_exemption = any(
+                    exemption for exemption in self.rules['exemptions']
+                    if re.match(exemption, backend_service.name))
+
+                if not is_exemption:
+                    return True
         return False

@@ -13,18 +13,7 @@
 # limitations under the License.
 
 rules:
-  - name: Rule Name Example
+  - name: 'SSL policy'
     proxy_name: '*'
-    ssl_policy: 'rare-platform-ssl-policy'
-    # exempt:
-    #   - proxy_name: '*-v1'
-    #   - proxy_name: '*-v1'
-    #   - proxy_name: '*-v1'
-
-  - name: Rule Name Example
-    proxy_name: 'sdf'
-    ssl_policy: 'rare-platform-ssl-policy2'
-
-  - name: Rule Name Example
-    proxy_name: 'sdf-v1'
-    ssl_policy: 'rare-platform-ssl-policy3'
+    ssl_policy: '*tgt-pe-lab/global/sslPolicies/rare-platform-ssl-policy'
+    exemptions:
