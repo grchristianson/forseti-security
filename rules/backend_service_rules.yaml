@@ -15,7 +15,7 @@
 rules:
   - name: Backend Service Security Policy
     backend_service_name: 'tapsampleapp-tgt-pe-lab-global-backend-service'
-    security_policy: 'https://www.googleapis.com/compute/beta/projects/tgt-pe-lab/global/securityPolicies/rare-platform-security-policy'
+    security_policy: '*rare-platform-security-policy'
   - name: Backend Service Security Policy
     backend_service_name: 'tapsampleapp-svc'
-    security_policy: 'https://www.googleapis.com/compute/beta/projects/tgt-pe-lab/global/securityPolicies/rare-platform-security-policy-bad'
+    security_policy: '*rare-platform-security-policy'

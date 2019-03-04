@@ -208,13 +208,13 @@ class Rule(object):
 
 
     def find_violation(self, backend_service):
-        """Find if the passed in target https proxy violates a rule
+        """Find if the passed in backend service violates a rule
 
         Args:
-            target_https_proxy (TargetHttpsProxy): target https proxy resource
+            backend_service (BackendService): backend service resource
 
         Returns:
-            bool: true if the target https proxy violates the rule.
+            bool: true if the backend service violates the rule.
         """
         is_name_match = re.match(self.rules['backend_service_name'], backend_service.name)
         if is_name_match is not None and is_name_match:
