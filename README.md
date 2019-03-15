@@ -1,7 +1,7 @@
 
 
 # Forseti Security
-A community-driven collection of open source tools to improve the security of 
+A community-driven collection of open source tools to improve the security of
 your Google Cloud Platform environments.
 
 [Get Started](https://forsetisecurity.org/docs/latest/setup/install.html)

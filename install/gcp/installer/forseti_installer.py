@@ -126,19 +126,26 @@ class ForsetiInstaller(object):
             self.preflight_checks()
 
         # Create/Reuse service account(s).
+        print ("*** forseti_installer.py/run_setup *** Create_or_reuse_service_accts() \n")
         self.create_or_reuse_service_accts()
 
         # Create configuration file and deployment template.
+        print(
+            "*** forseti_installer.py/run_setup *** create config and deployment () \n")
         (conf_file_path,
          deployment_tpl_path) = self.create_resource_files()
 
         # Deployment.
+        print(
+            "*** forseti_installer.py/run_setup *** generate bucket name and deploy() \n")
         bucket_name = self.generate_bucket_name()
         deploy_success, _ = self.deploy(deployment_tpl_path,
                                         conf_file_path,
                                         bucket_name)
 
         # After deployment.
+        print(
+            "*** forseti_installer.py/run_setup *** post install instructions() \n")
         instructions = self.post_install_instructions(deploy_success,
                                                       conf_file_path,
                                                       bucket_name)
