@@ -1,5 +1,7 @@
+pipeline:
+
   build-and-deploy-egg:
-    image: python:3.7.0
+    image: python:2.7
     commands:
       - echo '[distutils]'     >> ~/.pypirc
       - echo 'index-servers =' >> ~/.pypirc
@@ -14,6 +16,6 @@
       - python ./setup.py install
       - python ./setup.py sdist upload --repository cpe-pypi
     secrets: [ docker_username, docker_password ]
-    when:
-      branch: [ master ]
-      event: push
+    # when:
+    #   branch: [ master ]
+    #   event: push
