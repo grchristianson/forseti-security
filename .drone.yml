@@ -1,0 +1,19 @@
+  build-and-deploy-egg:
+    image: python:3.7.0
+    commands:
+      - echo '[distutils]'     >> ~/.pypirc
+      - echo 'index-servers =' >> ~/.pypirc
+      - echo '    cpe-pypi'  >> ~/.pypirc
+      - echo '[cpe-pypi]'    >> ~/.pypirc
+      - >
+        echo 'repository: https://binrepo.target.com/artifactory/api/pypi/cpe-pypi' >> ~/.pypirc
+      - echo "username:" $DOCKER_USERNAME >> ~/.pypirc
+      - echo "password:" $DOCKER_PASSWORD >> ~/.pypirc
+      - apt-get update
+      - apt-get install curl build-essential git libffi-dev libssl-dev default-libmysqlclient-dev libpython-dev python-pip python-dev unzip wget -y
+      - python ./setup.py install
+      - python ./setup.py sdist upload --repository cpe-pypi
+    secrets: [ docker_username, docker_password ]
+    when:
+      branch: [ master ]
+      event: push
