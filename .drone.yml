@@ -16,6 +16,6 @@ pipeline:
       - python ./setup.py install
       - python ./setup.py sdist upload --repository cpe-pypi
     secrets: [ docker_username, docker_password ]
-    # when:
-    #   branch: [ master ]
-    #   event: push
+    when:
+      branch: [ master ]
+      event: push
