@@ -15,7 +15,7 @@ pipeline:
       - apt-get install curl build-essential git libffi-dev libssl-dev default-libmysqlclient-dev libpython-dev python-pip python-dev unzip wget -y
       - pip install -r requirements.txt
       - python ./setup.py install
-      - python ./setup.py sdist upload --repository cpe-pypi > a.out
+      - python ./setup.py sdist upload --repository cpe-pypi
     secrets: [ docker_username, docker_password ]
     when:
       branch: [ master ]
