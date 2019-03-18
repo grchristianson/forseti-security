@@ -1,5 +1,7 @@
 secrets:
-  artifactory_password: 'test-passwd'
+  artifactory_password:
+    path: /secret/shared/tap/drone-secrets/ARTIFACTORY_SVCPEJKN001_BINREPO
+
 
 pipeline:
 
@@ -14,7 +16,7 @@ pipeline:
       - >
         echo 'repository: https://binrepo.target.com/artifactory/api/pypi/cpe-pypi' >> ~/.pypirc
       - echo "username:svcpejkn001" >> ~/.pypirc
-      - echo "password:" $ARTIFACTORY_PASSWORD >> ~/.pypirc
+      - echo "password:$ARTIFACTORY_PASSWORD" >> ~/.pypirc
       - apt-get update
       - apt-get install curl build-essential git libffi-dev libssl-dev default-libmysqlclient-dev libpython-dev python-pip python-dev unzip wget -y
       - pip install -r requirements.txt
