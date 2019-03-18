@@ -1,7 +1,5 @@
 secrets:
-  artifactory_password:
-    path: /secret/shared/tap/drone-secrets/ARTIFACTORY_SVCPEJKN001_BINREPO
-
+  artifactory_password: 'test-passwd'
 
 pipeline:
 
