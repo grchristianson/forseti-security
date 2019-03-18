@@ -1,10 +1,5 @@
-secrets:
-  artifactory_password:
-    path: /secret/shared/tap/drone-secrets/ARTIFACTORY_SVCPEJKN001_BINREPO
-
 
 pipeline:
-
 
   build-and-deploy-egg:
     image: python:2.7
@@ -15,14 +10,14 @@ pipeline:
       - echo '[cpe-pypi]'    >> ~/.pypirc
       - >
         echo 'repository: https://binrepo.target.com/artifactory/api/pypi/cpe-pypi' >> ~/.pypirc
-      - echo "username:svcpejkn001" >> ~/.pypirc
-      - echo "password:" $ARTIFACTORY_PASSWORD >> ~/.pypirc
+      - echo "username:" $DOCKER_USERNAME >> ~/.pypirc
+      - echo "password:" $DOCKER_PASSWORD >> ~/.pypirc
       - apt-get update
       - apt-get install curl build-essential git libffi-dev libssl-dev default-libmysqlclient-dev libpython-dev python-pip python-dev unzip wget -y
       - pip install -r requirements.txt
       - python ./setup.py install
       - python ./setup.py sdist upload --repository cpe-pypi
-    secrets: [ artifactory_password ]
+    secrets: [ docker_username, docker_password ]
     when:
       branch: [ master ]
       event: push
