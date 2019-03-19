@@ -1,3 +1,7 @@
+secrets:
+  artifactory_password:
+      path: /secret/shared/tap/drone-secrets/ARTIFACTORY_SVCPEJKN001_BINREPO
+
 pipeline:
   build:
     image: python:2.7
@@ -12,10 +16,11 @@ pipeline:
       event: push
 
   python-publish:
+    secrets: [ artifactory_password ]
     image: cpe.docker.target.com/drone-python-publish:latest
-    repository: https://binrepo.target.com/artifactory/api/pypi/cpe-pypi
+    repository: https://binrepo.target.com/artifactory/api/pypi/cpe-pypi/forseti
     username: svcpejkn001
-    password: ${ARTIFACTORY_SVCPEJKN001_BINREPO}
+    password: ${ARTIFACTORY_PASSWORD}
     when:
       branch: [ master ]
       event: push
